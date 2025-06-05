@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">iDrive</string>
+    <string name="welcome_text">Welcome to iDrive!</string>
+    <string name="welcome_subtext">Drive safely with us.</string>
+    <string name="login_button">Log-in</string>
+    <string name="register_button">Register</string>
+</resources>
