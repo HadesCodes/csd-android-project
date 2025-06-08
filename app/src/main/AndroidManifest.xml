@@ -22,6 +22,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".activities.AuthActivity" />
+        <activity android:name=".activities.HomePageActivity"/>
     </application>
 
 </manifest>

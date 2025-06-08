@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "742757230205",
+    "project_id": "idrive-1fcb6",
+    "storage_bucket": "idrive-1fcb6.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:742757230205:android:a3dd0b6809aa9d28803314",
+        "android_client_info": {
+          "package_name": "com.example.idrive"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC4rP1xwAp_uIEgMy4Lz0JXBkn1cX8aI0k"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

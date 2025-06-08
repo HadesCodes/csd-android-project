@@ -5,4 +5,16 @@
     <string name="login_button">Log-in</string>
     <string name="register_button">Register</string>
     <string name="logo_text">Our Logo</string>
+    <string name="first_name_indicator">First Name:</string>
+    <string name="last_name_indicator">Last Name:</string>
+    <string name="email_indicator">Email:</string>
+    <string name="phone_indicator">Phone:</string>
+    <string name="password_indicator">Password:</string>
+    <string name="last_name_hint">Enter Last Name here</string>
+    <string name="email_hint">example@mail.com</string>
+    <string name="btn_go_to_login">Got an Account?</string>
+    <string name="phone_hint">Personal Cell</string>
+    <string name="first_name_hint">Enter Name here</string>
+    <string name="password_hint">Enter a Password</string>
+    <string name="btn_go_to_register">Not a member?</string>
 </resources>
