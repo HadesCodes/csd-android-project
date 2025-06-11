@@ -43,14 +43,7 @@ public class RegisterFragment extends Fragment {
                 FirebaseUser firebaseUser = auth.getCurrentUser();
                 if (firebaseUser == null) return;
                 User newUser = new User(firstName, lastName, phone, email, password);
-
-                handler.addUser(newUser, firebaseUser.getUid(),
-                        aVoid -> {
-                            Toast.makeText(getContext(), "Registration successful", Toast.LENGTH_SHORT).show();
-                            goToHomepage(newUser);
-                        },
-                        e -> Toast.makeText(getContext(), "Failed to save user data: " + e.getMessage(), Toast.LENGTH_SHORT).show()
-                );
+                handler.addUser(newUser, firebaseUser.getUid());
             } else {
                 Toast.makeText(getContext(), "Registration failed: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
             }
