@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -33,7 +32,9 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.YearMonth;
 import java.time.format.TextStyle;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -43,10 +44,9 @@ import com.example.idrive.data.models.User;
 
 public class MemberHomeFragment extends Fragment {
     TextView tvGreeting, tvMonthTitle;
-    Button testBtn;
     CalendarView calendarView;
     ViewGroup titlesContainer;
-    Map<LocalDate, Lesson> lessonByDate = new HashMap<>();
+    Map<LocalDate, List<Lesson>> lessonByDate = new HashMap<>();
     FirebaseHandler firebaseHandler = new FirebaseHandler();
 
     @Nullable
@@ -64,7 +64,6 @@ public class MemberHomeFragment extends Fragment {
         calendarView = view.findViewById(R.id.calendarView);
         titlesContainer = view.findViewById(R.id.titlesContainer);
         tvMonthTitle = view.findViewById(R.id.tvMonthTitle);
-        testBtn = view.findViewById(R.id.testBtn);
 
         firebaseHandler.getCurrentUser(documentSnapshot -> {
             User user = documentSnapshot.toObject(User.class);
@@ -73,7 +72,9 @@ public class MemberHomeFragment extends Fragment {
             firebaseHandler.getLessonsWithUID(user.getUid(), lessonSnapshot -> {
                 for (DocumentSnapshot document : lessonSnapshot.getDocuments()) {
                     Lesson lesson = document.toObject(Lesson.class);
-                    if (lesson != null) lessonByDate.put(LocalDate.parse(lesson.getDate()), lesson);
+                    if (lesson != null) lessonByDate.computeIfAbsent(
+                            LocalDate.parse(lesson.getDate()),
+                            k -> new ArrayList<>()).add(lesson);
                 }
                 innitCalendar();
             }, exception -> {
@@ -122,9 +123,21 @@ public class MemberHomeFragment extends Fragment {
                     }
 
                     textView.setOnClickListener(view -> {
-                        if (lessonByDate.containsKey(day.getDate())) {
-                            Lesson lesson = lessonByDate.get(day.getDate());
-                            if (lesson != null) showLessonDialog(lesson);
+                        LocalDate date = day.getDate();
+                        List<Lesson> lessons = lessonByDate.get(date);
+
+                        if (lessons != null && !lessons.isEmpty()) {
+                            String[] items = lessons.stream()
+                                    .map(lesson -> lesson.getTime() + " - " + lesson.getNotes())
+                                    .toArray(String[]::new);
+
+                            new AlertDialog.Builder(requireContext())
+                                    .setTitle("Your Lessons on " + date)
+                                    .setItems(items, (dialog, which) -> {
+                                        Lesson selectedLesson = lessons.get(which);
+                                        showLessonDialog(selectedLesson);
+                                    })
+                                    .show();
                         }
                     });
                 } else {
@@ -151,7 +164,13 @@ public class MemberHomeFragment extends Fragment {
                 .setMessage(message)
                 .setPositiveButton("OK", null)
                 .setNegativeButton("Suggest Change", (dialog, which) -> {
-                    showSuggestDialog(lesson);
+                    firebaseHandler.checkSimilarSuggestions(lesson.getUserId(), lesson.getDate(), isUnique -> {
+                        if (isUnique) {
+                            showSuggestDialog(lesson);
+                        } else {
+                            Toast.makeText(getContext(), "You’ve already made a suggestion on this day.", Toast.LENGTH_SHORT).show();
+                        }
+                    }, e -> Toast.makeText(getContext(), "Error on multiple suggestions.", Toast.LENGTH_SHORT).show());
                 })
                 .show();
     }

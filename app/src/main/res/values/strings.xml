@@ -20,4 +20,8 @@
     <string name="greeting">Hello %1$s</string>
     <string name="etSuggestionReason">Add a Reason</string>
     <string name="etNotesHint">Notes</string>
+    <string name="btn_show_suggestions">Show Suggestions</string>
+    <string name="no_suggestions">No suggestions found</string>
+    <string name="suggestion_count">There are %1$d suggestions</string>
+    <string name="error_loading_suggestions">Error loading suggestions</string>
 </resources>

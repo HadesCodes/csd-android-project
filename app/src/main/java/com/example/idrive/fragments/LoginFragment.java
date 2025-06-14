@@ -46,17 +46,25 @@ public class LoginFragment extends Fragment {
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         FirebaseUser user = authenticator.getCurrentUser();
+                        if (user == null) {
+                            Toast.makeText(getContext(), "Authentication error. Please try again.", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
                         FirebaseFirestore.getInstance()
                                 .collection("users")
                                 .document(user.getUid())
                                 .get()
                                 .addOnSuccessListener(documentSnapshot -> {
-                                    boolean isAdmin = documentSnapshot.getBoolean("isAdmin") != null
-                                            && documentSnapshot.getBoolean("isAdmin");
-                                    Intent intent = new Intent(getActivity(), HomePageActivity.class);
-                                    intent.putExtra("is_admin", isAdmin);
-                                    startActivity(intent);
-                                    requireActivity().finish();
+                                    if (documentSnapshot.exists()) {
+                                        boolean isAdmin = documentSnapshot.getBoolean("isAdmin") != null
+                                                && documentSnapshot.getBoolean("isAdmin");
+                                        Intent intent = new Intent(getActivity(), HomePageActivity.class);
+                                        intent.putExtra("is_admin", isAdmin);
+                                        startActivity(intent);
+                                        requireActivity().finish();
+                                    } else {
+                                        Toast.makeText(getContext(), "User data not found. Please register first.", Toast.LENGTH_SHORT).show();
+                                    }
                                 });
                     } else {
                         Toast.makeText(getContext(), "Login failed: " + task.getException().getMessage(), Toast.LENGTH_LONG).show();

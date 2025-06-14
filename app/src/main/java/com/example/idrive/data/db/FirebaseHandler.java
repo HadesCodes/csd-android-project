@@ -70,10 +70,12 @@ public class FirebaseHandler {
                 .addOnFailureListener(onFailure::accept);
     }
 
-    public void addLesson(Lesson lesson) {
+    public void addLesson(Lesson lesson, OnSuccessListener<Void> onSuccess, OnFailureListener onFailure) {
         String docId = db.collection(LESSONS).document().getId();
         lesson.setId(docId);
-        db.collection(LESSONS).document(docId).set(lesson);
+        db.collection(LESSONS).document(docId).set(lesson)
+                .addOnSuccessListener(onSuccess)
+                .addOnFailureListener(onFailure);
     }
 
     public void getLessonsWithUID(String userId,
@@ -115,12 +117,25 @@ public class FirebaseHandler {
                 .addOnFailureListener(onFailure::accept);
     }
 
-    public void updateLesson(String id, Lesson newLesson) {
-        db.collection(LESSONS).document(id).set(newLesson);
+    public void updateLesson(String id, Suggestion suggestion, OnSuccessListener<Void> onSuccess, OnFailureListener onFailure) {
+        Lesson newLesson = new Lesson(
+                suggestion.getLessonId(),
+                suggestion.getUserId(),
+                suggestion.getNewDate(),
+                suggestion.getNewTime(),
+                suggestion.getReason());
+        newLesson.setId(id);
+        db.collection(LESSONS).document(id).set(newLesson)
+                .addOnSuccessListener(aVoid -> {
+                    deleteSuggestion(suggestion.getId(), onSuccess, onFailure);
+                })
+                .addOnFailureListener(onFailure);
     }
 
-    public void deleteLesson(String id) {
-        db.collection(LESSONS).document(id).delete();
+    public void deleteLesson(String id, OnSuccessListener<Void> onSuccess, OnFailureListener onFailure) {
+        db.collection(LESSONS).document(id).delete()
+                .addOnSuccessListener(onSuccess)
+                .addOnFailureListener(onFailure);
     }
 
     public void addSuggestion(Suggestion suggestion) {
@@ -129,21 +144,30 @@ public class FirebaseHandler {
         db.collection(SUGGESTIONS).document(docId).set(suggestion);
     }
 
-    public void getSuggestionsWithUID(String userId,
-                                      OnSuccessListener<QuerySnapshot> successListener,
-                                      OnFailureListener failureListener) {
+    public void getSuggestions(OnSuccessListener<QuerySnapshot> successListener,
+                               OnFailureListener failureListener) {
         db.collection(SUGGESTIONS)
-                .whereEqualTo("userId", userId)
                 .get()
                 .addOnSuccessListener(successListener)
                 .addOnFailureListener(failureListener);
+    }
+
+    public void checkSimilarSuggestions(String uid, String date, OnSuccessListener<Boolean> onSuccess, OnFailureListener onFailure) {
+        db.collection(SUGGESTIONS)
+                .whereEqualTo("userId",uid)
+                .whereEqualTo("oldDate", date)
+                .get()
+                .addOnSuccessListener(querySnapshot -> onSuccess.onSuccess(querySnapshot.isEmpty()))
+                .addOnFailureListener(onFailure);
     }
 
     public void updateSuggestion(String id, String newSuggestion) {
         db.collection(SUGGESTIONS).document(id).set(newSuggestion);
     }
 
-    public void deleteSuggestion(String id) {
-        db.collection(SUGGESTIONS).document(id).delete();
+    public void deleteSuggestion(String id, OnSuccessListener<Void> onSuccess, OnFailureListener onFailure) {
+        db.collection(SUGGESTIONS).document(id).delete()
+                .addOnSuccessListener(onSuccess)
+                .addOnFailureListener(onFailure);
     }
 }

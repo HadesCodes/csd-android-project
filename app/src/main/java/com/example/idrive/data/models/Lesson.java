@@ -5,7 +5,8 @@ public class Lesson {
 
     public Lesson() {}
 
-    public Lesson(String userId, String date, String time, String notes) {
+    public Lesson(String id, String userId, String date, String time, String notes) {
+        this.id = id;
         this.userId = userId;
         this.date = date;
         this.time = time;
