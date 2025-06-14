@@ -54,7 +54,7 @@ public class LoginFragment extends Fragment {
                                     boolean isAdmin = documentSnapshot.getBoolean("isAdmin") != null
                                             && documentSnapshot.getBoolean("isAdmin");
                                     Intent intent = new Intent(getActivity(), HomePageActivity.class);
-                                    intent.putExtra("is_admin", isAdmin ? "admin" : "member");
+                                    intent.putExtra("is_admin", isAdmin);
                                     startActivity(intent);
                                     requireActivity().finish();
                                 });

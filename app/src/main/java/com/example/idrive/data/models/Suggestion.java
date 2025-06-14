@@ -1,12 +1,13 @@
 package com.example.idrive.data.models;
 
 public class Suggestion {
-    private String id, userId, oldDate, newDate, oldTime, newTime, reason;
+    private String id, userId, lessonId, oldDate, newDate, oldTime, newTime, reason;
 
     public Suggestion() {}
 
-    public Suggestion(String userId, String oldDate, String oldTime, String newDate, String newTime, String reason) {
+    public Suggestion(String userId, String lessonId, String oldDate, String oldTime, String newDate, String newTime, String reason) {
         this.userId = userId;
+        this.lessonId = lessonId;
         this.oldDate = oldDate;
         this.oldTime = oldTime;
         this.newDate = newDate;
@@ -20,6 +21,10 @@ public class Suggestion {
 
     public String getUserId() {
         return userId;
+    }
+
+    public String getLessonId() {
+        return lessonId;
     }
 
     public String getOldDate() {
@@ -48,6 +53,10 @@ public class Suggestion {
 
     public void setUserId(String userId) {
         this.userId = userId;
+    }
+
+    public void setLessonId(String lessonId) {
+        this.lessonId = lessonId;
     }
 
     public void setOldDate(String oldDate) {

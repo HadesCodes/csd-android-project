@@ -17,4 +17,7 @@
     <string name="first_name_hint">Enter Name here</string>
     <string name="password_hint">Enter a Password</string>
     <string name="btn_go_to_register">Not a member?</string>
+    <string name="greeting">Hello %1$s</string>
+    <string name="etSuggestionReason">Add a Reason</string>
+    <string name="etNotesHint">Notes</string>
 </resources>

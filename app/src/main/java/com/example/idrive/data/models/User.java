@@ -1,6 +1,7 @@
 package com.example.idrive.data.models;
 
 public class User {
+    private String _uid;
     private String _firstName;
     private String _lastName;
     private String _email;
@@ -16,6 +17,10 @@ public class User {
         this._phone = _phone;
         this._password = _password;
         this._isAdmin = false;
+    }
+
+    public String getUid() {
+        return _uid;
     }
 
     public String getFirstName() {
@@ -40,6 +45,10 @@ public class User {
 
     public boolean getIsAdmin() {
         return _isAdmin;
+    }
+
+    public void setUid(String _uid) {
+        this._uid = _uid;
     }
 
     public void setFirstName(String _firstName) {
